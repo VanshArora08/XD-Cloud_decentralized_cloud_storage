@@ -14,40 +14,46 @@ function App() {
 
   useEffect(() => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+    console.log("in use effect");
     const loadProvider = async () => {
+      console.log("load provider called");
       if (provider) {
-        window.ethereum.on("chainChanged", () => {
-          window.location.reload();
-        });
-
-        window.ethereum.on("accountsChanged", () => {
-          window.location.reload();
-        });
+        window.ethereum.on("chainChanged", () => window.location.reload());
+        window.ethereum.on("accountsChanged", () => window.location.reload());
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
         const address = await signer.getAddress();
         setAccount(address);
-        let contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+        let contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
-        const contract = new ethers.Contract(
+        const Contract = new ethers.Contract(
           contractAddress,
           Upload.abi,
           signer
         );
-        //console.log(contract);
-        setContract(contract);
+        console.log(Contract);
+        setContract(Contract);
         setProvider(provider);
+        // console.log(contract);
       } else {
-        console.error("Metamask is not installed");
+        console.log("Metamask is not installed");
       }
     };
+    // console.log("provider");
     provider && loadProvider();
+    // console.log(contract);
   }, []);
   return (
-    <>
-      hello
-    </>
+    <div className="App">
+      <h1>X-Cloud</h1>
+      <div className="bg"></div>
+      <div className="bg bg2"></div>
+      <div className="bg bg3"></div>
+      {/* {provider.getCode(contract.address)} */}
+      <p>Account : {account ?? "please connect Metamask"}</p>
+      <FileUpload contract={contract} provider={provider} account={account} />
+      <Display contract={contract} account={account} />
+    </div>
   );
 }
 
