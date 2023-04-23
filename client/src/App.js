@@ -24,7 +24,7 @@ function App() {
         const signer = provider.getSigner();
         const address = await signer.getAddress();
         setAccount(address);
-        let contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+        let contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
         const Contract = new ethers.Contract(
           contractAddress,
@@ -44,16 +44,20 @@ function App() {
     // console.log(contract);
   }, []);
   return (
-    <div className="App">
-      <h1>X-Cloud</h1>
-      <div className="bg"></div>
-      <div className="bg bg2"></div>
-      <div className="bg bg3"></div>
-      {/* {provider.getCode(contract.address)} */}
-      <p>Account : {account ?? "please connect Metamask"}</p>
-      <FileUpload contract={contract} provider={provider} account={account} />
-      <Display contract={contract} account={account} />
-    </div>
+    <>
+      {modalOpen && (<Modal setModalOpen={setModalOpen} contract={contract}></Modal>)}
+      {!modalOpen && (<button className="share" onClick={() => { setModalOpen(true) }}>share</button>)}
+      <div className="App">
+        <h1>X-Cloud</h1>
+        <div className="bg"></div>
+        <div className="bg bg2"></div>
+        <div className="bg bg3"></div>
+        {/* {provider.getCode(contract.address)} */}
+        <p>Account : {account ?? "please connect Metamask"}</p>
+        <FileUpload contract={contract} provider={provider} account={account} />
+        <Display contract={contract} account={account} />
+      </div>
+    </>
   );
 }
 
